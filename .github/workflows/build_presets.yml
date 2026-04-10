@@ -20,7 +20,7 @@ jobs:
     container: devkitpro/devkita64:latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@master
 
     - name: Fix git safe directory issue
       run: git config --system --add safe.directory '*'
@@ -30,7 +30,7 @@ jobs:
         git clone --recurse-submodules https://github.com/switchbrew/libnx.git
 
     # fetch latest cmake
-    - uses: lukka/get-cmake@v3.31.6
+    - uses: lukka/get-cmake@v4.3.0
 
     - name: Set workspace permissions
       run: chmod 777 -R "$GITHUB_WORKSPACE"

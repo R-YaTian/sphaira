@@ -244,8 +244,8 @@ FetchContent_Declare(zstd
 )
 
 FetchContent_Declare(libnxtc
-    GIT_REPOSITORY https://github.com/ITotalJustice/libnxtc.git
-    GIT_TAG 88ce3d8
+    GIT_REPOSITORY https://github.com/R-YaTian/libnxtc.git
+    GIT_TAG 55d2d37
 )
 
 FetchContent_Declare(nvjpg
@@ -303,10 +303,12 @@ else()
     target_sources(sphaira PRIVATE source/ff16/ffunicode.c)
 endif()
 
+find_path(mbedtls_inc mbedtls REQUIRED)
+
 if (ENABLE_LIBUSBDVD)
     FetchContent_Declare(libusbdvd
-        GIT_REPOSITORY https://github.com/proconsule/libusbdvd.git
-        GIT_TAG 3cb0613
+        GIT_REPOSITORY https://github.com/R-YaTian/libusbdvd.git
+        GIT_TAG e8e8fed
     )
 
     FetchContent_MakeAvailable(libusbdvd)
@@ -315,6 +317,8 @@ if (ENABLE_LIBUSBDVD)
         ${libusbdvd_SOURCE_DIR}/source/usbdvd.cpp
         ${libusbdvd_SOURCE_DIR}/source/usbdvd_scsi.cpp
         ${libusbdvd_SOURCE_DIR}/source/usbdvd_utils.cpp
+        ${libusbdvd_SOURCE_DIR}/source/CSS/usbdvd_css.cpp
+        ${libusbdvd_SOURCE_DIR}/source/CSS/usbdvd_csscache.cpp
         ${libusbdvd_SOURCE_DIR}/source/fs/usbdvd_datadisc.cpp
         ${libusbdvd_SOURCE_DIR}/source/fs/audiocdfs/audiocdfs.cpp
         ${libusbdvd_SOURCE_DIR}/source/fs/audiocdfs/cdaudio_devoptab.cpp
@@ -327,11 +331,13 @@ if (ENABLE_LIBUSBDVD)
     )
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/)
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/os/switch)
+    target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/CSS)
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/fs)
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/fs/audiocdfs)
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/fs/iso9660)
     target_include_directories(libusbdvd PRIVATE ${libusbdvd_SOURCE_DIR}/source/fs/udf)
     target_include_directories(libusbdvd PUBLIC ${libusbdvd_SOURCE_DIR}/include)
+    target_include_directories(libusbdvd PUBLIC ${mbedtls_inc})
 
     target_compile_definitions(sphaira PRIVATE ENABLE_LIBUSBDVD)
     target_link_libraries(sphaira PRIVATE libusbdvd)
@@ -572,19 +578,20 @@ target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
 add_library(dr_libs INTERFACE)
 target_include_directories(dr_libs INTERFACE ${dr_libs_SOURCE_DIR})
 
+find_package(ZLIB REQUIRED)
+find_path(zlib_inc zlib.h)
+
 add_library(libnxtc
     ${libnxtc_SOURCE_DIR}/source/nxtc.c
     ${libnxtc_SOURCE_DIR}/source/nxtc_log.c
     ${libnxtc_SOURCE_DIR}/source/nxtc_utils.c
 )
-target_include_directories(libnxtc PUBLIC ${libnxtc_SOURCE_DIR}/include)
+target_include_directories(libnxtc PUBLIC ${libnxtc_SOURCE_DIR}/include ${zlib_inc})
 
-find_package(ZLIB REQUIRED)
 find_library(minizip_lib minizip REQUIRED)
 find_path(minizip_inc minizip REQUIRED)
 
 find_package(CURL REQUIRED)
-find_path(mbedtls_inc mbedtls REQUIRED)
 find_library(mbedcrypto_lib mbedcrypto REQUIRED)
 
 add_library(fatfs

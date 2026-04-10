@@ -420,9 +420,9 @@ struct FsProxyVfs : FsProxyBase {
     }
 
     virtual Result WriteFile(haze::File *file, s64 off, const void *buf, u64 write_size) {
-        auto f = static_cast<File*>(file->impl);
-        auto& e = m_entries[f->index];
-        e.file_size = std::max<s64>(e.file_size, off + write_size);
+        // auto f = static_cast<File*>(file->impl);
+        // auto& e = m_entries[f->index];
+        // e.file_size = std::max<s64>(e.file_size, off + write_size);
         R_SUCCEED();
     }
 

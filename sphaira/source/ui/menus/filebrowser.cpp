@@ -2176,10 +2176,8 @@ void Base::LoadAssocEntriesPath(const fs::FsPath& path) {
 void Base::LoadAssocEntries() {
     if (m_options & FsOption_LoadAssoc) {
         // load from romfs first
-        if (R_SUCCEEDED(romfsInit())) {
-            LoadAssocEntriesPath("romfs:/assoc/");
-            romfsExit();
-        }
+        LoadAssocEntriesPath("sphaira:/assoc/");
+
         // then load custom entries
         LoadAssocEntriesPath("/config/sphaira/assoc/");
     }

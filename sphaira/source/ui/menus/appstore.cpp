@@ -244,7 +244,7 @@ auto EntryLoadImageFile(fs::Fs& fs, const fs::FsPath& path, LazyImage& image) ->
 }
 
 auto EntryLoadImageFile(const fs::FsPath& path, LazyImage& image) -> bool {
-    if (!strncasecmp("romfs:/", path, 7)) {
+    if (!strncasecmp("sphaira:/", path, 9)) {
         fs::FsStdio fs;
         return EntryLoadImageFile(fs, path, image);
     } else {

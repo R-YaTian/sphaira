@@ -100,8 +100,6 @@ bool init(long index) {
     SCOPED_MUTEX(&g_mutex);
 
     g_tr_cache.clear();
-    R_TRY_RESULT(romfsInit(), false);
-    ON_SCOPE_EXIT( romfsExit() );
 
     u64 languageCode;
     SetLanguage setLanguage = SetLanguage_ENGB;
@@ -149,7 +147,7 @@ bool init(long index) {
     g_word_order = DetectWordOrder(lang_name);
 
     const fs::FsPath sdmc_path = "/config/sphaira/i18n/" + lang_name + ".json";
-    const fs::FsPath romfs_path = "romfs:/i18n/" + lang_name + ".json";
+    const fs::FsPath romfs_path = "sphaira:/i18n/" + lang_name + ".json";
     fs::FsPath path = sdmc_path;
 
     // try and load override translation first

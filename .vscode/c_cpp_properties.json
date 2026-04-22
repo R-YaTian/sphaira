@@ -6,13 +6,14 @@
                 "${default}",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/sphaira/include",
-                "${DEVKITPRO}/libnx/include/",
-                "${DEVKITPRO}/portlibs/switch/include/"
+                "C:/msys64/${DEVKITPRO}/libnx/include/",
+                "C:/msys64/${DEVKITPRO}/portlibs/switch/include/"
             ],
             "defines": [
                 "__SWITCH__",
                 "VERSION_DIRTY=\"1.0.0\"",
                 "VERSION=\"3.0.0\"",
+                "APP_DISPLAY_VERSION=\"1.0.0\"",
                 "YYJSON_DISABLE_WRITER=1",
                 "YYJSON_DISABLE_UTILS=1",
                 "YYJSON_DISABLE_NON_STANDARD=1",
@@ -20,8 +21,12 @@
             ],
             "cStandard": "gnu17",
             "cppStandard": "gnu++23",
-            "compilerPath": "${DEVKITPRO}/devkitA64/bin/aarch64-none-elf-gcc",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "intelliSenseMode": "linux-gcc-arm64",
+            "compilerPath": "C:/msys64/${DEVKITPRO}/devkitA64/bin/aarch64-none-elf-gcc",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compilerArgs": [
+                "--embed-dir=${workspaceFolder}/assets/embed"
+            ]
         }
     ],
     "version": 4

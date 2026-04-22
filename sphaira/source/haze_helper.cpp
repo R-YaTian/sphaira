@@ -599,32 +599,28 @@ struct FsInstallProxy final : FsProxyVfs {
         R_SUCCEED();
     }
 
-    void CloseFile(haze::File *file) override {
-        auto f = static_cast<File*>(file->impl);
-        if (!f) {
-            return;
-        }
-
-        bool update{};
+    void CloseFile(haze::File *file) override
+    {
         {
+            log_write("[MTP] closing current file\n");
             SCOPED_MUTEX(&g_shared_data.mutex);
-            if (f->mode == haze::FileOpenMode_WRITE) {
-                log_write("[MTP] closing current file\n");
-                if (g_shared_data.on_close) {
+            auto f = static_cast<File*>(file->impl);
+            if (f && f->mode == haze::FileOpenMode_WRITE)
+            {
+                if (g_shared_data.on_close)
+                {
                     g_shared_data.on_close();
                 }
 
                 g_shared_data.in_progress = false;
                 g_shared_data.current_file.clear();
-                update = true;
+
+                delete f;
+                file->impl = nullptr;
             }
         }
 
-        if (update) {
-            on_thing();
-        }
-
-        FsProxyVfs::CloseFile(file);
+        on_thing();
     }
 };
 

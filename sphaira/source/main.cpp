@@ -66,6 +66,8 @@ void userAppInit(void) {
         diagAbortWithResult(rc);
     if (R_FAILED(rc = ncmInitialize()))
         diagAbortWithResult(rc);
+    if (R_FAILED(rc = romfsMountSelf("sphaira")))
+        diagAbortWithResult(rc);
 
     // it doesn't matter if this fails.
     appletSetScreenShotPermission(AppletScreenShotPermission_Enable);
@@ -83,6 +85,7 @@ void userAppExit(void) {
     nifmExit();
     plExit();
     socketExit();
+    romfsUnmount("sphaira");
     // NOTE (DMC): prevents exfat corruption.
     if (auto fs = fsdevGetDeviceFileSystem("sdmc:")) {
         fsFsCommit(fs);

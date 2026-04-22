@@ -218,8 +218,8 @@ FetchContent_Declare(libpulsar
 )
 
 FetchContent_Declare(nanovg
-    GIT_REPOSITORY https://github.com/ITotalJustice/nanovg-deko3d.git
-    GIT_TAG 845c9fc
+    GIT_REPOSITORY https://github.com/R-YaTian/nanovg-deko3d.git
+    GIT_TAG 70c609e
 )
 
 FetchContent_Declare(stb
@@ -244,8 +244,8 @@ FetchContent_Declare(zstd
 )
 
 FetchContent_Declare(libnxtc
-    GIT_REPOSITORY https://github.com/R-YaTian/libnxtc.git
-    GIT_TAG 55d2d37
+    GIT_REPOSITORY https://github.com/DarkMatterCore/libnxtc.git
+    GIT_TAG 3b3670c
 )
 
 FetchContent_Declare(nvjpg
@@ -499,8 +499,8 @@ endif()
 
 if (ENABLE_AUDIO_MP3)
     FetchContent_Declare(id3v2lib
-        GIT_REPOSITORY https://github.com/larsbs/id3v2lib.git
-        GIT_TAG 141ffb8
+        GIT_REPOSITORY https://github.com/R-YaTian/id3v2lib.git
+        GIT_TAG 43e4592
     )
 
     FetchContent_MakeAvailable(id3v2lib)
@@ -645,15 +645,6 @@ add_dependencies(sphaira hbl_nso hbl_npdm)
 target_compile_options(sphaira PRIVATE
     --embed-dir=${CMAKE_SOURCE_DIR}/assets/embed
     --embed-dir=${CMAKE_BINARY_DIR}/hbl
-)
-
-# add nanovg shaders to romfs
-dkp_install_assets(sphaira_romfs
-    DESTINATION shaders
-    TARGETS
-        fill_aa_fsh
-        fill_fsh
-        fill_vsh
 )
 
 # create nacp

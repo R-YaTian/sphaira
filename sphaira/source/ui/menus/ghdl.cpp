@@ -259,10 +259,7 @@ void Menu::Scan() {
     m_entries.clear();
 
     // load from romfs first
-    if (R_SUCCEEDED(romfsInit())) {
-        LoadEntriesFromPath("romfs:/github/");
-        romfsExit();
-    }
+    LoadEntriesFromPath("sphaira:/github/");
 
     // then load custom entries
     LoadEntriesFromPath("/config/sphaira/github/");

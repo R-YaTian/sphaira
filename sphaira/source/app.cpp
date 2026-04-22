@@ -407,17 +407,16 @@ void LoadThemeInternal(ThemeMeta meta, ThemeData& theme_data, int inherit_level 
 
     // all themes will inherit from black theme by default.
     if (meta.inherit.empty() && !inherit_level) {
-        meta.inherit = "romfs:/themes/base_black_theme.ini";
+        meta.inherit = "sphaira:/themes/base_black_theme.ini";
     }
 
     // check if the theme inherits from another, if so, load it.
     // block inheriting from itself.
     if (inherit_level < inherit_level_max && !meta.inherit.empty() && strcasecmp(meta.inherit, "none") && meta.inherit != meta.ini_path) {
         log_write("inherit is not empty: %s\n", meta.inherit.s);
-        if (R_SUCCEEDED(romfsInit())) {
+        {
             ThemeMeta inherit_meta;
             const auto has_meta = LoadThemeMeta(meta.inherit, inherit_meta);
-            romfsExit();
 
             // base themes do not have a meta
             if (!has_meta) {
@@ -447,9 +446,7 @@ void LoadThemeInternal(ThemeMeta meta, ThemeData& theme_data, int inherit_level 
         return 1;
     };
 
-    if (R_SUCCEEDED(romfsInit())) {
-        ON_SCOPE_EXIT(romfsExit());
-
+    {
         if (!ini_browse(cb, &theme_data, meta.ini_path)) {
             log_write("failed to open ini: %s\n", meta.ini_path.s);
         } else {
@@ -1344,9 +1341,7 @@ void App::LoadTheme(const ThemeMeta& meta) {
     LoadThemeInternal(meta, theme_data);
     m_theme.meta = meta;
 
-    if (R_SUCCEEDED(romfsInit())) {
-        ON_SCOPE_EXIT(romfsExit());
-
+    {
         // load all assets / colours.
         for (auto& e : THEME_ENTRIES) {
             m_theme.elements[e.id] = LoadElement(theme_data.elements[e.id], e.type);
@@ -1392,10 +1387,7 @@ void App::ScanThemes(const std::string& path) {
 
 void App::ScanThemeEntries() {
     // load from romfs first
-    if (R_SUCCEEDED(romfsInit())) {
-        ScanThemes("romfs:/themes/");
-        romfsExit();
-    }
+    ScanThemes("sphaira:/themes/");
 
     // then load custom entries
     ScanThemes("/config/sphaira/themes/");
@@ -1916,8 +1908,7 @@ App::App(const char* argv0) {
         // try and load previous theme, default to previous version otherwise.
         fs::FsPath theme_path = m_theme_path.Get();
         ThemeMeta theme_meta;
-        if (R_SUCCEEDED(romfsInit())) {
-            ON_SCOPE_EXIT(romfsExit());
+        {
             if (!LoadThemeMeta(theme_path, theme_meta)) {
                 log_write("failed to load meta using default\n");
                 theme_path = DEFAULT_THEME_PATH;

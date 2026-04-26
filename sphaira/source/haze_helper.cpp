@@ -420,9 +420,9 @@ struct FsProxyVfs : FsProxyBase {
     }
 
     virtual Result WriteFile(haze::File *file, s64 off, const void *buf, u64 write_size) {
-        // auto f = static_cast<File*>(file->impl);
-        // auto& e = m_entries[f->index];
-        // e.file_size = std::max<s64>(e.file_size, off + write_size);
+        auto f = static_cast<File*>(file->impl);
+        auto& e = m_entries[f->index];
+        e.file_size = std::max<s64>(e.file_size, off + write_size);
         R_SUCCEED();
     }
 
@@ -556,6 +556,7 @@ struct FsInstallProxy final : FsProxyVfs {
 
     Result CreateFile(const char* path, s64 size) override {
         R_TRY(FailedIfNotEnabled());
+        R_UNLESS(!g_shared_data.in_progress, MAKERESULT(Module_Haze, 20)); // Device busy, another install in progress.
         R_TRY(IsValidFileType(path));
         R_TRY(FsProxyVfs::CreateFile(path, size));
         R_SUCCEED();
@@ -612,7 +613,6 @@ struct FsInstallProxy final : FsProxyVfs {
                     g_shared_data.on_close();
                 }
 
-                g_shared_data.in_progress = false;
                 g_shared_data.current_file.clear();
 
                 delete f;
@@ -701,7 +701,7 @@ bool Init() {
     }
 
     g_should_exit = false;
-    if (!haze::Initialize(haze_callback, g_fs_entries, App::GetApp()->m_mtp_vid.Get(), App::GetApp()->m_mtp_pid.Get())) {
+    if (!haze::Initialize(haze_callback, g_fs_entries, App::GetApp()->m_mtp_vid.Get(), App::GetApp()->m_mtp_pid.Get(), false)) {
         return false;
     }
 
@@ -733,12 +733,17 @@ void InitInstallMode(const OnInstallStart& on_start, const OnInstallWrite& on_wr
     g_shared_data.on_start = on_start;
     g_shared_data.on_write = on_write;
     g_shared_data.on_close = on_close;
+    g_shared_data.in_progress = false;
     g_shared_data.enabled = true;
 }
 
 void DisableInstallMode() {
     SCOPED_MUTEX(&g_shared_data.mutex);
     g_shared_data.enabled = false;
+}
+
+void FinishInstallProgress() {
+    g_shared_data.in_progress = false;
 }
 
 } // namespace sphaira::libhaze

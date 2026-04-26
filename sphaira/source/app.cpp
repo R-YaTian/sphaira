@@ -1655,7 +1655,7 @@ App::App(const char* argv0) {
             }
         }
 
-        devoptab::FixDkpBug();
+        // devoptab::FixDkpBug();
 
 #ifdef ENABLE_LIBHAZE
         if (App::GetMtpEnable()) {

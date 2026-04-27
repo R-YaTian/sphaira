@@ -28,7 +28,7 @@ option(ENABLE_DEVOPTAB_WEBDAV "" ON)
 # it also adds 230k to binary size, and i don't think anyone will use it.
 option(ENABLE_DEVOPTAB_SFTP "" OFF)
 
-set(sphaira_VERSION 1.0.1)
+set(sphaira_VERSION 1.0.2)
 
 project(sphaira
     VERSION ${sphaira_VERSION}
@@ -287,7 +287,7 @@ endif()
 
 if (ENABLE_LIBUSBHSFS)
     # enable this if you want ntfs and ext4 support, at the cost of a huge final binary size.
-    set(USBHSFS_GPL OFF)
+    set(USBHSFS_GPL ON)
     set(USBHSFS_SXOS_DISABLE ON)
 
     FetchContent_Declare(libusbhsfs

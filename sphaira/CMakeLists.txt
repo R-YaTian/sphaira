@@ -244,8 +244,8 @@ FetchContent_Declare(zstd
 )
 
 FetchContent_Declare(libnxtc
-    GIT_REPOSITORY https://github.com/DarkMatterCore/libnxtc.git
-    GIT_TAG 3b3670c
+    GIT_REPOSITORY https://github.com/R-YaTian/libnxtc.git
+    GIT_TAG e2adaa5
 )
 
 FetchContent_Declare(nvjpg

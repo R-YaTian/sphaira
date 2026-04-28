@@ -96,7 +96,7 @@ static std::string get_internal(std::string_view str) {
 
 } // namespace
 
-bool init(long index) {
+std::string init(long index) {
     SCOPED_MUTEX(&g_mutex);
 
     g_tr_cache.clear();
@@ -135,14 +135,14 @@ bool init(long index) {
         case SetLanguage_DE: lang_name = "de"; break;
         case SetLanguage_IT: lang_name = "it"; break;
         case SetLanguage_ES: lang_name = "es"; break;
-        case SetLanguage_ZHCN: lang_name = "zh-hans"; break;
+        case SetLanguage_ZHCN: lang_name = "zh-Hans"; break;
         case SetLanguage_KO: lang_name = "ko"; break;
         case SetLanguage_NL: lang_name = "nl"; break;
         case SetLanguage_PT: lang_name = "pt"; break;
         case SetLanguage_RU: lang_name = "ru"; break;
-        case SetLanguage_ZHTW: lang_name = "zh-hant"; break;
-        case SetLanguage_ZHHANS: lang_name = "zh-hans"; break;
-        case SetLanguage_ZHHANT: lang_name = "zh-hant"; break;
+        case SetLanguage_ZHTW: lang_name = "zh-Hant"; break;
+        case SetLanguage_ZHHANS: lang_name = "zh-Hans"; break;
+        case SetLanguage_ZHHANT: lang_name = "zh-Hant"; break;
         default: break;
     }
 
@@ -165,7 +165,7 @@ bool init(long index) {
             root = yyjson_doc_get_root(json);
             if (root) {
                 log_write("opened json: %s\n", path.s);
-                return true;
+                return lang_name;
             } else {
                 log_write("failed to find root\n");
             }
@@ -176,7 +176,7 @@ bool init(long index) {
         log_write("failed to read file\n");
     }
 
-    return false;
+    return "";
 }
 
 void exit() {

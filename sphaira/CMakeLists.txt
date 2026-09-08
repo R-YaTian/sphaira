@@ -291,7 +291,7 @@ endif()
 
 if (ENABLE_LIBUSBHSFS)
     # enable this if you want ntfs and ext4 support, at the cost of a huge final binary size.
-    set(USBHSFS_GPL OFF)
+    set(USBHSFS_GPL ON)
     set(USBHSFS_SXOS_DISABLE ON)
 
     FetchContent_Declare(libusbhsfs
